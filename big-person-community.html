@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIG PERSON COMMUNITY</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --red: #8b1a1a;
+    --gray: #1e1e1e;
+    --gray2: #2d2d2d;
+    --text-muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Crimson Pro', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 8vw;
+    position: relative;
+    border-bottom: 1px solid #222;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: 'BIG';
+    position: absolute;
+    right: -2vw;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(200px, 30vw, 500px);
+    color: #141414;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 12vw, 180px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    animation: fadeUp 1s 0.15s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-top: 32px;
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 1s 0.3s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-line {
+    width: 80px;
+    height: 2px;
+    background: var(--gold);
+    margin-top: 40px;
+    animation: expandWidth 1s 0.5s ease both;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 8vw;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: var(--gold);
+    margin: 12px auto 0;
+    animation: pulse 2s infinite;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 8vw;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 7vw, 90px);
+    line-height: 1;
+    letter-spacing: 0.03em;
+    margin-bottom: 40px;
+  }
+
+  /* FOR SECTION */
+  .for-section .body-text {
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 300;
+    line-height: 1.8;
+    max-width: 720px;
+    color: #ccc;
+  }
+
+  .for-section .body-text strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* TRAITS */
+  .traits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    margin-top: 16px;
+  }
+
+  .trait-card {
+    background: var(--gray);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+
+  .trait-card:hover { background: var(--gray2); }
+
+  .trait-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+
+  .trait-card:hover::before { transform: scaleX(1); }
+
+  .trait-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .trait-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+
+  /* WHY SECTION */
+  .why-section {
+    background: var(--gray);
+  }
+
+  .why-body {
+    font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 300;
+    line-height: 1.9;
+    max-width: 800px;
+    color: #bbb;
+  }
+
+  .why-body strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  /* SCHEDULE */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2px;
+    margin-top: 16px;
+  }
+
+  .schedule-block {
+    padding: 32px 28px;
+    background: #111;
+    border-top: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+
+  .schedule-block:nth-child(1) { border-color: var(--gold); }
+  .schedule-block:nth-child(2) { border-color: var(--red); }
+  .schedule-block:nth-child(3) { border-color: var(--gold-light); }
+  .schedule-block:nth-child(4) { border-color: #556b55; }
+
+  .schedule-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+
+  .schedule-activity {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+
+  .schedule-duration {
+    font-size: 13px;
+    color: var(--gold);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  /* NOTICE BOX */
+  .notice-box {
+    background: var(--red);
+    padding: 40px 48px;
+    margin-top: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .notice-box::before {
+    content: '!';
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(255,255,255,0.07);
+    line-height: 1;
+  }
+
+  .notice-box p {
+    font-size: clamp(16px, 2vw, 20px);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+  }
+
+  /* WHAT TO BRING */
+  .bring-list {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .bring-item {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    padding: 20px 28px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* FORM */
+  .form-section {
+    background: #050505;
+  }
+
+  .form-wrapper {
+    max-width: 760px;
+  }
+
+  .form-intro {
+    font-size: 18px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.7;
+    margin-bottom: 52px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #1e1e1e;
+  }
+
+  .form-intro strong {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .form-group {
+    margin-bottom: 48px;
+  }
+
+  .form-label {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .form-question {
+    font-size: clamp(17px, 2vw, 21px);
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  .form-control {
+    width: 100%;
+    background: #0e0e0e;
+    border: 1px solid #2a2a2a;
+    border-bottom: 2px solid #2a2a2a;
+    color: var(--white);
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    padding: 16px 20px;
+    transition: border-color 0.3s, background 0.3s;
+    outline: none;
+    resize: none;
+  }
+
+  .form-control:focus {
+    border-color: var(--gold);
+    background: #111;
+  }
+
+  .form-control::placeholder {
+    color: #3a3a3a;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  .submit-btn {
+    margin-top: 16px;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 22px 60px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .submit-btn:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    background: #0e1a0e;
+    border: 1px solid #2a5a2a;
+    padding: 40px;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .success-msg.show { display: block; }
+
+  .success-msg h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #6bcf6b;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .success-msg p {
+    color: var(--text-muted);
+    font-size: 16px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px 8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    color: #333;
+  }
+
+  .footer-brand span { color: var(--gold); }
+
+  .footer-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #333;
+    text-transform: uppercase;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes expandWidth {
+    from { width: 0; }
+    to { width: 80px; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Strictly by Invitation / Merit</p>
+  <h1 class="hero-title">
+    Big Person<br>
+    <span>Community</span>
+  </h1>
+  <p class="hero-subtitle">
+    For those who know they are great and have been called to do great things — who refuse the labels society invented for them.
+  </p>
+  <div class="hero-line"></div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="for-section">
+  <div class="reveal">
+    <p class="section-label">01 — Who It's For</p>
+    <h2 class="section-title">You Know<br>Who You Are</h2>
+    <p class="body-text">
+      <strong>BIG PERSON COMMUNITY</strong> is for people who know they are great and have been called to do great things — who won't settle for the nomenclature created by society. You've always sensed you operate differently. You see what others miss. You move when others hesitate.
+    </p>
+  </div>
+</section>
+
+<!-- TRAITS -->
+<section>
+  <div class="reveal">
+    <p class="section-label">02 — Traits of a Big Person</p>
+    <h2 class="section-title">Are You<br>Built This Way?</h2>
+  </div>
+  <div class="traits-grid reveal">
+    <div class="trait-card">
+      <span class="trait-num">01</span>
+      <div class="trait-name">Thinkers</div>
+    </div>
+    <div class="trait-card">
+      <span class="trait-num">02</span>
+      <div class="trait-name">Doers &amp;<br>Executors</div>
+    </div>
+    <div class="trait-card">
+      <span class="trait-num">03</span>
+      <div class="trait-name">Connectors</div>
+    </div>
+    <div class="trait-card">
+      <span class="trait-num">04</span>
+      <div class="trait-name">Discipline</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-section">
+  <div class="reveal">
+    <p class="section-label">03 — Why We Gather</p>
+    <h2 class="section-title">The Mission</h2>
+    <p class="why-body">
+      To <strong>prepare ahead</strong> against the movers and shakers of this world. To identify trends, weaknesses, patterns and <strong>expose loopholes in major sectors</strong> that can be exploited for wealth creation. We don't react to the world — we <strong>anticipate it.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section>
+  <div class="reveal">
+    <p class="section-label">04 — Session Structure</p>
+    <h2 class="section-title">6 Hours.<br>No Wasted Time.</h2>
+    <p style="font-size:16px; color: var(--text-muted); font-family: 'Space Mono', monospace; margin-bottom: 32px;">11:00 AM — 5:00 PM</p>
+  </div>
+  <div class="schedule-grid reveal">
+    <div class="schedule-block">
+      <div class="schedule-time">11:00 AM</div>
+      <div class="schedule-activity">Identifying<br>Problems</div>
+      <div class="schedule-duration">2 hours</div>
+    </div>
+    <div class="schedule-block">
+      <div class="schedule-time">1:00 PM</div>
+      <div class="schedule-activity">Global<br>Realities</div>
+      <div class="schedule-duration">1 hour</div>
+    </div>
+    <div class="schedule-block">
+      <div class="schedule-time">2:00 PM</div>
+      <div class="schedule-activity">Providing<br>Solutions</div>
+      <div class="schedule-duration">2 hours</div>
+    </div>
+    <div class="schedule-block">
+      <div class="schedule-time">4:00 PM</div>
+      <div class="schedule-activity">Actionable<br>Steps</div>
+      <div class="schedule-duration">1 hour</div>
+    </div>
+  </div>
+
+  <div class="reveal" style="margin-top: 60px;">
+    <p class="section-label">What to Bring</p>
+    <div class="bring-list">
+      <div class="bring-item">📋 Stand + Paper / Marker</div>
+      <div class="bring-item">🍎 A Snackable Item</div>
+      <div class="bring-item">🧠 Your Sharpest Mind</div>
+    </div>
+  </div>
+
+  <div class="notice-box reveal">
+    <p>
+      If you are a <strong>perpetual latecomer</strong> or a <strong>lazy executor</strong> — don't bother planning to attend. This space is not designed for spectators. It is designed for people who <em>execute.</em>
+    </p>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-section" id="apply">
+  <div class="form-wrapper">
+    <div class="reveal">
+      <p class="section-label">05 — Apply for Consideration</p>
+      <h2 class="section-title">Request<br>Your Seat</h2>
+      <p class="form-intro">
+        Acceptance is <strong>strictly by invitation or merit.</strong> Answer every question with full honesty. We are not looking for perfect answers — we are looking for <strong>the right mind.</strong>
+      </p>
+    </div>
+
+    <form id="applyForm" class="reveal">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-control" name="name" placeholder="Your name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input type="email" class="form-control" name="email" placeholder="your@email.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Question 01</label>
+        <p class="form-question">Do you believe conspiracy theories exist? What are your thoughts about it?</p>
+        <textarea class="form-control" name="q1" rows="5" placeholder="Share your honest perspective..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Question 02</label>
+        <p class="form-question">What conversations intrigue you? List them.</p>
+        <textarea class="form-control" name="q2" rows="5" placeholder="The topics that keep your mind alive at night..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Question 03</label>
+        <p class="form-question">How fast do you think of solutions? Does execution excite you?</p>
+        <textarea class="form-control" name="q3" rows="5" placeholder="Describe how your mind works in problem mode..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Question 04</label>
+        <p class="form-question">How often do you spot challenges that are yet to happen? Do you also think of the solution? Give an example.</p>
+        <textarea class="form-control" name="q4" rows="6" placeholder="A real example — something you saw coming before it arrived..." required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">Submit Application →</button>
+
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <h3>Application Received</h3>
+      <p>We will review your submission and reach out if you are selected. Think big. Stay ready.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Big Person <span>Community</span></div>
+  <div class="footer-note">Strictly by Invitation / Merit</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (i * 0.05) + 's';
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit
+  document.getElementById('applyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('successMsg').classList.add('show');
+    window.scrollTo({ top: document.getElementById('successMsg').offsetTop - 100, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
